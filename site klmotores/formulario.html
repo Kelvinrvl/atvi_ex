@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>formulario Klmotores</title>
+    <link rel="icon" type="image/x-incon" href="favicon.ico">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        main2 {
+            height: 100%;
+        }
+    </style>
+    <script>
+        function checkAge() {
+            const birthDate = new Date(document.getElementById("birthDate").value);
+            const today = new Date();
+            const age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            if (age < 18) {
+                document.getElementById("ageMessage").innerText = "Você deve ter pelo menos 18 anos.";
+                return false;
+            } else {
+                document.getElementById("ageMessage").innerText = "";
+            }
+            return true;
+        }
+
+        function updateCities() {
+            const state = document.getElementById("state").value;
+            const cities = {
+                "SP": ["São Paulo", "Campinas", "Santos"],
+                "RJ": ["Rio de Janeiro", "Niterói", "Petrópolis"],
+                "MG": ["Belo Horizonte", "Uberlândia", "Ouro Preto"],
+                "ES": ["Vitória", "Vila Velha", "Serra"]
+            };
+            const citySelect = document.getElementById("city");
+            citySelect.innerHTML = "<option value=''>Selecione uma cidade</option>";
+            if (state) {
+                cities[state].forEach(city => {
+                    const option = document.createElement("option");
+                    option.value = city;
+                    option.text = city;
+                    citySelect.add(option);
+                });
+                citySelect.disabled = false;
+            } else {
+                citySelect.disabled = true;
+            }
+        }
+
+        function validateForm() {
+            const passwordValid = validarSenha();
+            const ageValid = checkAge();
+            const stateSelected = document.getElementById("state").value !== "";
+            const citySelected = document.getElementById("city").value !== "";
+
+            if (passwordValid && ageValid && stateSelected && citySelected) {
+                window.alert("Formulário enviado com sucesso!")
+                
+
+            } else {
+               document.getElementById("formMessage").innerText = "Por favor, preencha todos os campos corretamente.";
+
+            }
+        }
+        function validarSenha() {
+
+            const senha = document.getElementById("senha").value;
+            const senhaConfirmacao = document.getElementById("senhaConfirmacao").value;
+
+            if (senha === senhaConfirmacao) {
+                document.getElementById("mensagem").textContent = "Senhas iguais!";
+                document.getElementById("mensagem").style.color = "green";
+            } else {
+                document.getElementById("mensagem").textContent = "Senhas diferentes!";
+                document.getElementById("mensagem").style.color = "red";
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <h1>KL motores</h1>
+        <nav>
+            <a href="index.html">
+                <li>Página Inicial</li>
+            </a>
+            <a href="Galeria.html" rel="prev">
+                <li>Galeria</li>
+            </a>
+            <a href="formulario.html">
+                <li>Formulário</li>
+            </a>
+        </nav>
+    </header>
+
+    <div class="main2">
+        <main>
+            <div class="formu">
+                <form onsubmit="event.preventDefault(); if(validateForm()) this.submit();">
+                    <br />
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" required>
+                    <br />
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <br />
+                    <h3>Confirmação de Senha</h3>
+                    <input type="password" id="senha" placeholder="Digite sua senha" onkeyup="validarSenha()">
+                    <br>
+                    <input type="password" id="senhaConfirmacao" placeholder="Confirme sua senha"
+                        onkeyup="validarSenha()">
+                    <p id="mensagem"></p>
+                    <label for="birthDate">Data de nascimento:</label>
+                    <br />
+                    <input type="date" id="birthDate" name="birthDate" required />
+                    <p id="ageMessage"></p>
+                    <br />
+                    <label for="state">Estado:</label>
+                    <select id="state" name="state" onchange="updateCities()" required>
+                        <option value="">Selecione um estado</option>
+                        <option value="SP">São Paulo</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="MG">Minas Gerais</option>
+                        <option value="ES">Espírito Santo</option>
+                    </select>
+                    <br />
+                    <br />
+                    <label for="city"> Cidade:</label>
+                    <select id="city" name="city" disabled required>
+                        <option value="">Selecione uma cidade</option>
+                    </select>
+                    <br />
+                    <br />
+                    <p>fale oque devemos melhorar em nosso site</p>
+                    <textarea id="myTextarea" rows="4" cols="50" maxlength="200"></textarea>
+                    <p id="charCount"></p>
+
+                    <script>
+                        const textarea = document.getElementById('myTextarea');
+                        const charCount = document.getElementById('charCount');
+                        const maxChars = 200; // Defina o limite máximo de caracteres aqui
+
+                        textarea.addEventListener('input', () => {
+                            const inputLength = textarea.value.length;
+                            charCount.textContent = `Caracteres digitados: ${inputLength}/${maxChars}`;
+
+                            if (inputLength >= maxChars) {
+                                charCount.style.color = 'red'; // Mude a cor para indicar que o limite foi atingido
+                                window.alert("atingiu o limite maximo de caracteres permitidos !")
+                            } else {
+                                charCount.style.color = 'black';
+                            }
+                        });
+                    </script>
+                    <div class="env">
+                        <input type="submit" onclick="validateForm();">
+                        <p id=" formMessage"></p>
+                    </div>
+
+                </form>
+            </div>
+
+            <h6> </h6>
+
+        </main>
+    </div>
+    <footer>
+        <p>&copy; KL motores todos os direitos reservados.</p>
+    </footer>
+
+</body>
+
+</html>
